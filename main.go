@@ -8,6 +8,7 @@ import (
 
 func main() {
 	targetDir := flag.String("dir", ".", "target directory")
+	includeHidden := flag.Bool("hidden", false, "include hidden directories")
 	flag.Parse()
 
 	err := os.Chdir(*targetDir)
@@ -29,5 +30,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(contents)
+	fmt.Print("Directories found:\n\n")
+
+	for _, entry := range contents {
+		if entry.IsDir() {
+			if !*includeHidden && entry.Name()[0] == '.' {
+				continue
+			}
+			fmt.Println(entry.Name())
+		}
+	}
 }
