@@ -6,6 +6,14 @@ import (
 	"os"
 )
 
+const (
+	colorGreen  = "\033[32m"
+	colorYellow = "\033[33m"
+	colorBlue   = "\033[34m"
+	colorRed    = "\033[31m"
+	colorReset  = "\033[0m"
+)
+
 func main() {
 	targetDir := flag.String("dir", ".", "target directory")
 	includeHidden := flag.Bool("hidden", false, "include hidden directories")
@@ -13,20 +21,22 @@ func main() {
 
 	err := os.Chdir(*targetDir)
 	if err != nil {
-		fmt.Printf("Oops! Failed to change directory: %v\n", err)
+		fmt.Printf("%sOops! Failed to change directory: %v%s\n", colorRed, err, colorReset)
 		os.Exit(1)
 	}
 
 	wd, err := os.Getwd()
 
+	fmt.Printf("\nProcessing directory: %s%s%s\n\n", colorGreen, wd, colorReset)
+
 	if err != nil {
-		fmt.Printf("Oops! Failed to get current directory: %v\n", err)
+		fmt.Printf("%sOops! Failed to get current directory: %v%s\n", colorRed, err, colorReset)
 		os.Exit(1)
 	}
 
 	contents, err := os.ReadDir(wd)
 	if err != nil {
-		fmt.Printf("Oops! Failed to read directory: %v\n", err)
+		fmt.Printf("%sOops! Failed to read directory: %v%s\n", colorRed, err, colorReset)
 		os.Exit(1)
 	}
 
@@ -37,7 +47,7 @@ func main() {
 			if !*includeHidden && entry.Name()[0] == '.' {
 				continue
 			}
-			fmt.Printf("> %s\n", entry.Name())
+			fmt.Printf("> %s%s%s\n", colorBlue, entry.Name(), colorReset)
 		}
 	}
 }
