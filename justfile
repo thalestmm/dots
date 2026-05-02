@@ -3,6 +3,11 @@
 r args="":
     @go run . {{ args }}
 
+# [B]uild
+[group('dev')]
+b:
+    @go build -o tmp/main .
+
 # [W]atch
 [group('dev')]
 w:
