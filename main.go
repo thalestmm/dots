@@ -105,10 +105,14 @@ func main() {
 	fmt.Println()
 
 	// Traverse each .dotfiles directory and symlink to the desired path
+
+	fmt.Printf("Starting synchronization\n\n")
 	for _, dir := range dotfileDirs {
 		// Skip git dir
 		if dir.Name() != ".git" {
+			fmt.Printf("Working on %s%s%s...\n", colorGreen, dir.Name(), colorReset)
 			traverse(filepath.Join(dotfilesDir, dir.Name()))
+			fmt.Printf("Done!\n\n")
 		}
 	}
 
@@ -169,6 +173,8 @@ func copyDir(src, dst string) error {
 	return nil
 }
 
+// traverse walks recursively trough a dotfiles directory and symlink
+// the children files to each mapped path.
 func traverse(dir string) error {
 	fmt.Printf("%straversing %s%s\n", colorBlue, dir, colorReset)
 	return nil
