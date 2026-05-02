@@ -123,10 +123,10 @@ func main() {
 	fmt.Println()
 
 	// TODO: Remove, debug only
-	if err := exec.Command("open", "~/.config").Start(); err != nil {
-		fmt.Printf("%sOops! Failed to open directory: %v%s\n", colorRed, err, colorReset)
-		os.Exit(1)
-	}
+	// if err := exec.Command("open", dotfilesDir).Start(); err != nil {
+	// 	fmt.Printf("%sOops! Failed to open directory: %v%s\n", colorRed, err, colorReset)
+	// 	os.Exit(1)
+	// }
 }
 
 func copyFile(src, dst string) error {
@@ -183,12 +183,14 @@ func traverse(path, dirName, homeDir string) error {
 	if err := os.MkdirAll(filepath.Join(homeDir, dirName), 0755); err != nil {
 		return err
 	}
+	fmt.Printf("upserted %s\n", filepath.Join(homeDir, dirName))
 	fmt.Printf("%straversing %s%s\n", colorBlue, path, colorReset)
 	fmt.Printf("dirname: %s\n", dirName)
 	children, err := os.ReadDir(path)
 	if err != nil {
 		return err
 	}
+	var numFiles int
 	for _, child := range children {
 		srcPath := filepath.Join(path, child.Name())
 		dstPath := filepath.Join(homeDir, dirName, child.Name())
@@ -198,10 +200,14 @@ func traverse(path, dirName, homeDir string) error {
 				return err
 			}
 		} else {
+			numFiles++
 			if err := exec.Command("ln", "-s", srcPath, dstPath).Start(); err != nil {
 				return err
 			}
 		}
+	}
+	if numFiles > 0 {
+		fmt.Printf("  %d total files found\n", numFiles)
 	}
 	return nil
 }
