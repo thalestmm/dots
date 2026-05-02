@@ -122,11 +122,7 @@ func main() {
 
 	fmt.Println()
 
-	// TODO: Remove, debug only
-	// if err := exec.Command("open", dotfilesDir).Start(); err != nil {
-	// 	fmt.Printf("%sOops! Failed to open directory: %v%s\n", colorRed, err, colorReset)
-	// 	os.Exit(1)
-	// }
+	os.Exit(0)
 }
 
 func copyFile(src, dst string) error {
