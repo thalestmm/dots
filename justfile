@@ -78,4 +78,8 @@ release version="patch": f b t
     git tag -a v$new_version -m "Release v$new_version"
     git push origin v$new_version
 
+    # Create new release using the GitHub CLI
+    gh release create v$version --generate-notes --title "Release v$new_version" --fail-on-no-commits --verify-tag
+    git push origin main
+
     # goreleaser -f config/goreleaser.yaml --snapshot --clean
