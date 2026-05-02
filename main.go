@@ -83,7 +83,6 @@ func main() {
 		}
 	}
 
-	// Traverse each new directory and symlink to the desired path
 	dirs, err = os.ReadDir(dotfilesDir)
 	if err != nil {
 		fmt.Printf("%sOops! Failed to read .dotfiles directory: %v%s\n", colorRed, err, colorReset)
@@ -96,6 +95,8 @@ func main() {
 			fmt.Printf("> %s%s%s\n", colorYellow, entry.Name(), colorReset)
 		}
 	}
+
+	// Traverse each .dotfiles directory and symlink to the desired path
 
 	// TODO: Remove, debug only
 	if err := exec.Command("open", dotfilesDir).Start(); err != nil {
