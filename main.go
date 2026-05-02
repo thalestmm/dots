@@ -91,13 +91,24 @@ func main() {
 	}
 
 	fmt.Printf("\nContents of .dotfiles:\n\n")
+
+	var dotfileDirs []os.DirEntry
 	for _, entry := range dirs {
 		if entry.IsDir() {
 			fmt.Printf("> %s%s%s\n", colorYellow, entry.Name(), colorReset)
+			dotfileDirs = append(dotfileDirs, entry)
 		}
 	}
 
+	fmt.Println()
+
 	// Traverse each .dotfiles directory and symlink to the desired path
+	for _, dir := range dotfileDirs {
+		// Skip git dir
+		if dir.Name() != ".git" {
+			traverse(filepath.Join(dotfilesDir, dir.Name()))
+		}
+	}
 
 	// TODO: Remove, debug only
 	// if err := exec.Command("open", dotfilesDir).Start(); err != nil {
@@ -151,5 +162,10 @@ func copyDir(src, dst string) error {
 		}
 	}
 
+	return nil
+}
+
+func traverse(dir string) error {
+	fmt.Printf("%straversing %s%s\n", colorBlue, dir, colorReset)
 	return nil
 }
