@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
+	"io"
 	"os"
+	"os/exec"
+	"path/filepath"
 )
 
 const (
@@ -42,12 +46,96 @@ func main() {
 
 	fmt.Print("Directories found:\n\n")
 
+	var dirs []os.DirEntry
+
 	for _, entry := range contents {
 		if entry.IsDir() {
 			if !*includeHidden && entry.Name()[0] == '.' {
 				continue
 			}
 			fmt.Printf("> %s%s%s\n", colorBlue, entry.Name(), colorReset)
+			dirs = append(dirs, entry)
 		}
 	}
+
+	fmt.Println(dirs)
+
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Printf("%sOops! Failed to get home directory: %v%s\n", colorRed, err, colorReset)
+		os.Exit(1)
+	}
+
+	// See if the .dotfiles dir already exists
+	dotfilesDir := homeDir + "/.dotfiles"
+
+	if err := os.MkdirAll(dotfilesDir, 0755); err != nil {
+		fmt.Printf("%sOops! Failed to create .dotfiles directory: %v%s\n", colorRed, err, colorReset)
+		os.Exit(1)
+	}
+
+	fmt.Printf("\nUpserted .dotfiles directory: %s%s%s\n", colorYellow, dotfilesDir, colorReset)
+
+	// Copy contents of current directory to .dotfiles dir
+	for _, entry := range dirs {
+		if err := copyDir(filepath.Join(*targetDir, entry.Name()), dotfilesDir); err != nil {
+			fmt.Printf("%sOops! Failed to copy directory: %v%s\n", colorRed, err, colorReset)
+			os.Exit(1)
+		}
+	}
+
+	if err := exec.Command("open", dotfilesDir).Start(); err != nil {
+		fmt.Printf("%sOops! Failed to open directory: %v%s\n", colorRed, err, colorReset)
+		os.Exit(1)
+	}
+}
+
+func copyFile(src, dst string) error {
+	file, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	reader := bufio.NewReader(file)
+
+	bytes, err := io.ReadAll(reader)
+	if err != nil {
+		return err
+	}
+
+	if err := os.WriteFile(dst, bytes, 0644); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func copyDir(src, dst string) error {
+	entries, err := os.ReadDir(src)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Copying", src, "to", dst)
+
+	basePath := filepath.Join(dst, src)
+	if err := os.MkdirAll(basePath, 0755); err != nil {
+		return err
+	}
+
+	for _, entry := range entries {
+		if entry.IsDir() {
+			if err := os.MkdirAll(filepath.Join(basePath, entry.Name()), 0755); err != nil {
+				return err
+			}
+			if err := copyDir(filepath.Join(src, entry.Name()), filepath.Join(basePath, entry.Name())); err != nil {
+				return err
+			}
+		} else {
+			if err := copyFile(filepath.Join(src, entry.Name()), filepath.Join(basePath, entry.Name())); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
