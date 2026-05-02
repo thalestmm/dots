@@ -113,7 +113,8 @@ func main() {
 		if dir.Name() != ".git" {
 			fmt.Printf("Working on %s%s%s...\n", colorGreen, dir.Name(), colorReset)
 			if err := traverse(filepath.Join(dotfilesDir, dir.Name()), "", homeDir); err != nil {
-				fmt.Printf("%sOops! Failed to traverse and symlink: %v%s", colorRed, err, colorReset)
+				fmt.Printf("%sOops! Failed to traverse and symlink: %v%s\n", colorRed, err, colorReset)
+				os.Exit(1)
 			}
 			fmt.Printf("Done!\n\n")
 		}
@@ -179,19 +180,29 @@ func copyDir(src, dst string) error {
 // traverse walks recursively trough a dotfiles directory and symlink
 // the children files to each mapped path.
 func traverse(path, dirName, homeDir string) error {
+	if err := os.MkdirAll(filepath.Join(homeDir, dirName), 0755); err != nil {
+		return err
+	}
 	fmt.Printf("%straversing %s%s\n", colorBlue, path, colorReset)
+	fmt.Printf("dirname: %s\n", dirName)
 	children, err := os.ReadDir(path)
 	if err != nil {
 		return err
 	}
 	for _, child := range children {
+		srcPath := filepath.Join(path, child.Name())
+		dstPath := filepath.Join(homeDir, dirName, child.Name())
+
 		if child.IsDir() {
-			if err := traverse(filepath.Join(path, child.Name()), filepath.Base(path), homeDir); err != nil {
+			if err := traverse(filepath.Join(path, child.Name()), filepath.Join(filepath.Base(path), dirName), homeDir); err != nil {
 				return err
 			}
 		} else {
-			if err := os.Symlink(filepath.Join(path, child.Name()), filepath.Join(homeDir, dirName, path)); err != nil {
-				return err
+			fmt.Printf("symlink src: %s\n", srcPath)
+			fmt.Printf("symlink dst: %s\n", dstPath)
+
+			if err := exec.Command("ln", "-s", srcPath, dstPath); err != nil {
+				return err.Err
 			}
 		}
 	}
