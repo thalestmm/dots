@@ -15,11 +15,12 @@ w:
 
 # Stage all changes and [c]ommit
 [group('dev')]
-c msg="chore: update": fmt
+c msg="chore: update": f
     @git add .
     @git commit -m "{{ msg }}"
 
-# Format code
+# [F]ormat code
 [group('ci')]
-fmt:
+f:
     @go fmt ./...
+    @go vet ./...
