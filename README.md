@@ -20,6 +20,5 @@ target
 
 In this case, by running `dot -dir target`, the final outcome will be the `~/.config/dot` directory, containing the `a.json` and `b.json` symlinked files.
 
-
 ---
 *No AI was used during the development of this tool.*
