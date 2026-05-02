@@ -1,12 +1,18 @@
 # [R]un
 [group('dev')]
-r args="":
+r args="-dir example":
     @go run . {{ args }}
 
 # [B]uild
 [group('dev')]
 b:
     @go build -o tmp/main .
+
+# [T]est
+[group('ci')]
+[group('dev')]
+t:
+    @go test ./...
 
 # [W]atch
 [group('dev')]
@@ -33,5 +39,13 @@ f:
 
 # Bump app version in app.json, create new tag and publish binaries with goreleaser
 [group('ci')]
-release:
-    @goreleaser -f config/goreleaser.yaml --snapshot --clean
+release version="patch": f b t
+    #!/usr/bin/env bash
+    git switch main
+    git pull
+
+    set -euo pipefail
+
+
+
+    goreleaser -f config/goreleaser.yaml --snapshot --clean
