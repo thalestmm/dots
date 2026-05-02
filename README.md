@@ -2,6 +2,8 @@
 
 Pure `go` implementation of a simple `dotfiles` manager for synchronization accross multiple environments.
 
+Available for Linux and MacOS systems.
+
 Example setup for a target directory:
 
 ```bash
