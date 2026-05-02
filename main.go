@@ -198,11 +198,8 @@ func traverse(path, dirName, homeDir string) error {
 				return err
 			}
 		} else {
-			fmt.Printf("symlink src: %s\n", srcPath)
-			fmt.Printf("symlink dst: %s\n", dstPath)
-
-			if err := exec.Command("ln", "-s", srcPath, dstPath); err != nil {
-				return err.Err
+			if err := exec.Command("ln", "-s", srcPath, dstPath).Start(); err != nil {
+				return err
 			}
 		}
 	}
