@@ -1,7 +1,7 @@
 # [R]un
 [group('dev')]
-r:
-    @go run .
+r args="":
+    @go run . {{ args }}
 
 # [W]atch
 [group('dev')]

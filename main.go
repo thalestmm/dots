@@ -30,7 +30,6 @@ func main() {
 	}
 
 	wd, err := os.Getwd()
-	targetPath := filepath.Join(wd, *targetDir)
 
 	fmt.Printf("\nProcessing directory: %s%s%s\n\n", colorGreen, wd, colorReset)
 
@@ -77,7 +76,7 @@ func main() {
 
 	// Copy contents of target directory to .dotfiles dir
 	for _, entry := range dirs {
-		if err := copyDir(filepath.Join(targetPath, entry.Name()), dotfilesDir); err != nil {
+		if err := copyDir(filepath.Join(wd, entry.Name()), dotfilesDir); err != nil {
 			fmt.Printf("%s", filepath.Join(*targetDir, entry.Name()))
 			fmt.Printf("%sOops! Failed to copy directory: %v%s\n", colorRed, err, colorReset)
 			os.Exit(1)
@@ -127,6 +126,8 @@ func copyFile(src, dst string) error {
 // copyDir copies the contents of a directory to another directory.
 // It takes a full src path and the base dst path.
 func copyDir(src, dst string) error {
+	fmt.Printf("src: %s\n", src)
+	fmt.Printf("dst: %s\n", dst)
 	entries, err := os.ReadDir(src)
 	if err != nil {
 		return err
@@ -134,8 +135,6 @@ func copyDir(src, dst string) error {
 
 	dirName := filepath.Base(src)
 	srcParentPath := filepath.Dir(src)
-	fmt.Printf("src: %s\n", src)
-	fmt.Printf("dst: %s\n", dst)
 	fmt.Printf("parent: %s\n", srcParentPath)
 	fmt.Printf("name: %s\n\n", dirName)
 
