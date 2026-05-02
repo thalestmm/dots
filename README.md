@@ -18,7 +18,7 @@ target
             └── b.json
 ```
 
-In this case, by running `dot -dir target`, the final outcome will be the `~/.config/dot` directory, containing the `a.json` and `b.json` files.
+In this case, by running `dot -dir target`, the final outcome will be the `~/.config/dot` directory, containing the `a.json` and `b.json` symlinked files.
 
 
 ---
