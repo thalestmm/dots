@@ -31,16 +31,23 @@ func main() {
 
 	var gitRemoteURL *url.URL
 	if *gitRemoteURLInput != "" {
-		fmt.Println("Parsing git url")
+		fmt.Println("Parsing git URL...")
 		gitRemoteURL, err := url.Parse(*gitRemoteURLInput)
 		if err != nil {
-			fmt.Printf("%sOops! Failed to parse the git URL: %v%s", colorRed, err, colorReset)
+			fmt.Printf("%sOops! Failed to parse the git URL: %v%s\n", colorRed, err, colorReset)
+			os.Exit(1)
 		}
+		fmt.Printf("\nChecked! %s%s%s\n", colorYellow, gitRemoteURL, colorReset)
 
-		fmt.Println(gitRemoteURL)
+		// Check if git is installed
+		if err := exec.Command("git", "-v").Start(); err != nil {
+			fmt.Printf("%sOops! git is not installed.%s\n", colorRed, colorReset)
+			os.Exit(1)
+		}
 	}
 
 	fmt.Println(gitRemoteURL)
+
 	err := os.Chdir(*targetDir)
 	if err != nil {
 		fmt.Printf("%sOops! Failed to change directory: %v%s\n", colorRed, err, colorReset)
