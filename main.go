@@ -23,16 +23,15 @@ const (
 )
 
 func main() {
-	gitRemoteURLInput := flag.String("git", "", "URL for the git remote repository")
+	gitRemoteURL := flag.String("git", "", "URL for the git remote repository")
 	targetDir := flag.String("dir", ".", "relative path to target directory")
 	includeHidden := flag.Bool("hidden", false, "include hidden directories in target directory (nested hidden directories are always included)")
 	isDryRun := flag.Bool("dry-run", false, "don't apply symlinks")
 	flag.Parse()
 
-	var gitRemoteURL *url.URL
-	if *gitRemoteURLInput != "" {
-		fmt.Println("Parsing git URL...")
-		gitRemoteURL, err := url.Parse(*gitRemoteURLInput)
+	if *gitRemoteURL != "" {
+		fmt.Print("\nParsing git URL...\n")
+		gitRemoteURL, err := url.Parse(*gitRemoteURL)
 		if err != nil {
 			fmt.Printf("%sOops! Failed to parse the git URL: %v%s\n", colorRed, err, colorReset)
 			os.Exit(1)
@@ -46,23 +45,23 @@ func main() {
 		}
 
 		// Create a tmp dir to store the cloned repo
-		tmpDir, err := os.MkdirTemp("", "dots")
+		tmpDir, err := os.MkdirTemp("", "dots_")
 		if err != nil {
 			fmt.Printf("%sOops! Failed to create the temporary dir: %v%s\n", colorRed, err, colorReset)
 			os.Exit(1)
 		}
 		defer os.RemoveAll(tmpDir)
 
-		fmt.Println(tmpDir)
+		fmt.Printf("\nCloning into %s.../%s%s (tmp)\n", colorGreen, filepath.Base(tmpDir), colorReset)
 
-		if err := exec.Command("git", "clone", gitRemoteURL.String(), tmpDir).Start(); err != nil {
+		if err := exec.Command("git", "clone", gitRemoteURL.String(), tmpDir).Run(); err != nil {
 			fmt.Printf("%sOops! Failed to clone the repo: %v%s\n", colorRed, err, colorReset)
 			os.Exit(1)
 		}
 
+		// Override target dir to use the tmp dir with the cloned repo
+		targetDir = &tmpDir
 	}
-
-	fmt.Println(gitRemoteURL)
 
 	err := os.Chdir(*targetDir)
 	if err != nil {
@@ -72,7 +71,9 @@ func main() {
 
 	wd, err := os.Getwd()
 
-	fmt.Printf("\nProcessing directory: %s%s%s\n\n", colorGreen, wd, colorReset)
+	exec.Command("open", wd).Start()
+
+	fmt.Printf("\nProcessing directory: %s%s%s\n\n", colorBlue, wd, colorReset)
 
 	if err != nil {
 		fmt.Printf("%sOops! Failed to get current directory: %v%s\n", colorRed, err, colorReset)
@@ -145,7 +146,7 @@ func main() {
 
 	// Traverse each .dotfiles directory and symlink to the desired path
 
-	fmt.Printf("Starting synchronization\n\n")
+	fmt.Printf("Starting synchronization...\n\n")
 	for _, dir := range dotfileDirs {
 		// Skip git dir
 		if dir.Name() != ".git" {
