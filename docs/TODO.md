@@ -1,0 +1,1 @@
+- Include `sync` command: pulls, commits local changes (with machine identifier), pushes to remote (`dots sync`)
