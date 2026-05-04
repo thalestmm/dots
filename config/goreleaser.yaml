@@ -39,6 +39,16 @@ changelog:
       - "^test:"
 
 release:
+  github:
+    owner: thalestmm
+    name: dots
+
+  draft: true
+
+  use_existing_draft: true
+
+  mode: append
+
   footer: >-
 
     ---
