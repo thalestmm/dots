@@ -1,5 +1,7 @@
 package cmd
 
+import "fmt"
+
 const (
 	colorGreen  = "\033[32m"
 	colorYellow = "\033[33m"
@@ -12,3 +14,7 @@ const (
 	fontBold  = "\033[1m"
 	fontReset = "\033[0m"
 )
+
+func printError(msg string, err error) {
+	fmt.Printf("%sOops! %s: %v%s\n", colorRed, msg, err, colorReset)
+}
