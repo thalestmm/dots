@@ -35,7 +35,7 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "dots",
-	Short: "dots: A simple CLI tool for managing your dotfiles.",
+	Short: "\033[31m\033[1mdots\033[0m: A simple CLI tool for managing your dotfiles.",
 	Long:  "",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
@@ -58,7 +58,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/dots.toml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/dots.json)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -77,7 +77,7 @@ func initConfig() {
 
 		// Search config in $HOME/.config with name "dots" (without extension).
 		viper.AddConfigPath(filepath.Join(home, ".config"))
-		viper.SetConfigType("toml")
+		viper.SetConfigType("json")
 		viper.SetConfigName("dots")
 	}
 

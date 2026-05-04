@@ -1,7 +1,7 @@
 // Copyright 2026 @thalestmm. All rights reserved.
 //
 // MIT license
-package main
+package cmd
 
 import (
 	"bufio"
