@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"os"
@@ -77,6 +78,8 @@ func initializeConfiguration(cmd *cobra.Command, args []string) {
 		return
 	}
 
+	// TODO: Add https if not present
+
 	cfg.RemoteURL = parsedURL.String()
 
 	// Prompt for the dotfiles directory
@@ -92,6 +95,18 @@ func initializeConfiguration(cmd *cobra.Command, args []string) {
 	dotfilesDirInput = strings.TrimSpace(dotfilesDirInput)
 	if dotfilesDirInput != "" {
 		cfg.DotfilesDir = dotfilesDirInput
+	}
+
+	jsonCfg, err := json.MarshalIndent(cfg, "", "  ")
+	if err != nil {
+		fmt.Printf("%sOops! Error marshaling config: %v%s\n", colorRed, err, colorReset)
+		return
+	}
+
+	err = os.WriteFile(cfgPath, jsonCfg, 0644)
+	if err != nil {
+		fmt.Printf("%sOops! Error writing config: %v%s\n", colorRed, err, colorReset)
+		return
 	}
 
 	fmt.Println(cfg)
