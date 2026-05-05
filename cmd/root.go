@@ -39,6 +39,12 @@ var rootCmd = &cobra.Command{
 	Short: fmt.Sprintf("\n%s%sdots%s: A simple CLI tool for managing your dotfiles.", colorRed, fontBold, colorReset),
 	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
+		if cmd.Flag("version").Changed {
+			// TODO: Implement
+			fmt.Println("")
+			return
+		}
+
 		fmt.Printf("\nWelcome to %s%sdots%s!\n\n", colorRed, fontBold, colorReset)
 
 		if viper.ConfigFileUsed() == "" {
@@ -63,6 +69,8 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/dots.json)")
+
+	rootCmd.Flags().BoolP("version", "v", false, "print the installed app version")
 }
 
 // initConfig reads in config file and ENV variables if set.
