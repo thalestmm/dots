@@ -82,7 +82,15 @@ func initializeConfiguration(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	// TODO: Add https if not present
+	if !strings.HasPrefix(parsedURL.String(), "https://") {
+		parsedURL.Scheme = "https"
+	}
+
+	if !strings.HasSuffix(parsedURL.String(), ".git") {
+		parsedURL.Path += ".git"
+	}
+
+	// TODO: Add a quick health check
 
 	cfg.RemoteURL = parsedURL.String()
 
