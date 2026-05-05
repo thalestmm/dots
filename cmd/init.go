@@ -18,8 +18,9 @@ import (
 )
 
 type Config struct {
-	RemoteURL   string `json:"remote_url"`
-	DotfilesDir string `json:"dotfiles_dir"`
+	RemoteURL     string `json:"remote_url"`
+	DotfilesDir   string `json:"dotfiles_dir"`
+	IncludeHidden bool   `json:"include_hidden"`
 }
 
 func defaultConfig(home string) Config {
