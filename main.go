@@ -39,6 +39,8 @@ type AppInfo struct {
 }
 
 func main() {
+	fmt.Println("Testing remote go install")
+
 	var appInfo AppInfo
 
 	// Parse app.json
