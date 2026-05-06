@@ -82,7 +82,7 @@ release version="patch": f b t
     gh release create v$new_version --generate-notes --title "Release v$new_version" --fail-on-no-commits --verify-tag --draft
     git push origin main
 
-    # goreleaser -f config/goreleaser.yaml --snapshot --clean
+    goreleaser -f config/goreleaser.yaml
 
 i:
     ./scripts/install.sh
