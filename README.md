@@ -10,7 +10,7 @@ Available for Linux and MacOS systems.
 go install github.com/thalestmm/dots@latest
 ```
 
-Run `dots`!
+Run `dots` !
 
 Example setup for a target directory:
 
