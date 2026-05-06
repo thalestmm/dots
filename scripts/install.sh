@@ -9,6 +9,10 @@ ARCH=$(uname -m)
 
 echo "$OS $ARCH"
 
-CURRENT_VERSION=$(curl -s "$REPO/releases/latest" | jq -r .tag_name)
+GH_PAYLOAD=$(curl -s "$REPO/releases/latest")
 
+CURRENT_VERSION=$(echo "$GH_PAYLOAD" | jq -r .tag_name)
 echo "Current version: $CURRENT_VERSION"
+
+RELEASE_ASSETS=$(echo "$GH_PAYLOAD" | jq -r .assets[].name)
+echo "Release assets: $RELEASE_ASSETS"
