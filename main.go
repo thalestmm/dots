@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/viper"
 	"github.com/thalestmm/dots/cmd"
 )
 
@@ -45,6 +46,9 @@ func main() {
 		fmt.Printf("Oops! Error parsing app.json: %v\n", err)
 		os.Exit(1)
 	}
+
+	// Set version here to retrieve later
+	viper.Set("version", appInfo.Version)
 
 	cmd.Execute()
 }

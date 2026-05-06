@@ -40,8 +40,7 @@ var rootCmd = &cobra.Command{
 	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
 		if cmd.Flag("version").Changed {
-			// TODO: Implement
-			fmt.Println("")
+			fmt.Println(viper.GetString("version"))
 			return
 		}
 
