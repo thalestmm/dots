@@ -12,7 +12,9 @@ go install github.com/thalestmm/dots@latest
 
 Run `dots` !
 
-Example setup for a target directory:
+## Setup
+
+Example structure for your `dotfiles` repository:
 
 ```bash
 target
