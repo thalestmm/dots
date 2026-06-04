@@ -1,3 +1,8 @@
+# List all available commands (default runner)
+_help:
+    @echo ""
+    @just --list
+
 # [R]un
 [group('dev')]
 r args="-git https://github.com/thalestmm/dots.git -dry-run":
