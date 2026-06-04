@@ -20,15 +20,15 @@ Example structure for your `dotfiles` repository:
 target
 ├── a
 │   └── .config
-│       └── dot
+│       └── dots
 │           └── a.json
 └── b
     └── .config
-        └── dot
+        └── dots
             └── b.json
 ```
 
-In this case, by running `dot -dir target`, the final outcome will be the `~/.config/dot` directory, containing the `a.json` and `b.json` symlinked files.
+In this case, by running `dots -dir target`, the final outcome will be the `~/.config/dots` directory, containing the `a.json` and `b.json` symlinked files.
 
 ---
 *No AI was used during the development of this tool.*
