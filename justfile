@@ -96,7 +96,16 @@ release version="patch":
 
     goreleaser -f config/goreleaser.yaml
 
-# Run the [i]nstal script
+alias si := script-install
+
+# Run the installation script
 [group('dev')]
-i:
+script-install:
     ./scripts/install.sh
+
+alias gi := go-install
+
+# Install locally with go
+[group('dev')]
+go-install:
+    @go install .
