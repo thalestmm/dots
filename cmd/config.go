@@ -24,12 +24,12 @@ var configCmd = &cobra.Command{
 			initCmd.Run(cmd, args)
 		}
 
-		vimCmd := exec.Command("vim", cfgPath)
-		vimCmd.Stdin = os.Stdin
-		vimCmd.Stdout = os.Stdout
-		vimCmd.Stderr = os.Stderr
+		nvimCmd := exec.Command("nvim", cfgPath)
+		nvimCmd.Stdin = os.Stdin
+		nvimCmd.Stdout = os.Stdout
+		nvimCmd.Stderr = os.Stderr
 
-		if err := vimCmd.Run(); err != nil {
+		if err := nvimCmd.Run(); err != nil {
 			fmt.Printf("%sOops! An error occurred while opening the config file: %v%s\n", colorRed, err, colorReset)
 		}
 	},
