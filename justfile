@@ -3,43 +3,55 @@ _help:
     @echo ""
     @just --list
 
-# [R]un
+alias r := run
+
+# Run the application
 [group('dev')]
-r args="-git https://github.com/thalestmm/dots.git -dry-run":
+run args="-git https://github.com/thalestmm/dots.git -dry-run":
     @go run . {{ args }}
 
-# [B]uild
+alias b := build
+
+# Build the application binary
 [group('dev')]
-b:
+build:
     @go build -o tmp/main .
 
-# [T]est
+alias t := test
+
+# Test the entire application
 [group('ci')]
 [group('dev')]
-t:
+test:
     @go test ./...
 
-# Stage all changes and [c]ommit
+alias c := commit
+
+# Stage all changes and commit
 [group('dev')]
-c msg="chore: update": f
+commit msg="chore: update":
     @git add .
     @git commit -m "{{ msg }}"
 
-# Stage all changes, commit and [p]ush
+alias p := push
+
+# Stage all changes, commit and push
 [group('dev')]
-p msg="chore: update":
+push msg="chore: update":
     @just c "{{ msg }}"
     @git push
 
-# [F]ormat code
+alias f := format
+
+# Format code
 [group('ci')]
-f:
+format:
     @go fmt ./...
     @go vet ./...
 
 # Bump app version in app.json, create new tag and publish binaries with goreleaser
 [group('ci')]
-release version="patch": f b t
+release version="patch":
     #!/usr/bin/env bash
     git switch main
     git pull
