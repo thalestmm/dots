@@ -24,6 +24,8 @@ var configCmd = &cobra.Command{
 			initCmd.Run(cmd, args)
 		}
 
+		// TODO: Add support for other editors (run through options and exit on the first successful)
+
 		nvimCmd := exec.Command("nvim", cfgPath)
 		nvimCmd.Stdin = os.Stdin
 		nvimCmd.Stdout = os.Stdout
