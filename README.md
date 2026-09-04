@@ -28,11 +28,8 @@ Example structure for your `dotfiles` repository:
             └── b.json
 ```
 
-<<<<<<< HEAD
-In this case, by running `dots -dir target`, the final outcome will be the `~/.config/dots` directory, containing the `a.json` and `b.json` symlinked files.
-=======
+
 In this case, the final outcome will be the `~/.config/dots` directory, containing the `a.json` and `b.json` symlinked files.
->>>>>>> 840933b (chore: update)
 
 ---
 *No AI was used during the development of this tool.*
